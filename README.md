@@ -1,4 +1,5 @@
-📈 Gerenciamento de Vendas
+Gerenciamento de Vendas
+
 Consultas SQL e padronização de dados de vendas, pensadas para quem trabalha com documentos e precisa de informação organizada.
 ![SQL](https://img.shields.io/badge/SQL-4479A1?style=flat&logo=postgresql&logoColor=white)
 Sobre o projeto
