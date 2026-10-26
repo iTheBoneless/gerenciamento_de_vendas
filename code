@@ -1,0 +1,160 @@
+CREATE TABLE TB_CLIENTE (
+    cod_cliente VARCHAR(255) PRIMARY KEY,
+    nome_cliente VARCHAR(100),
+    cpf_cliente VARCHAR(16),
+    rua_cliente VARCHAR(50),
+    num_rua VARCHAR(50),
+    complemento VARCHAR(40),
+    bairro VARCHAR(20),
+    cidade VARCHAR(50),
+    uf CHAR(2)
+);
+
+CREATE TABLE TB_CLIENTE_TELEFONE (
+  cod_cliente VARCHAR(255),
+  telefone_cliente VARCHAR(20),
+  PRIMARY KEY (cod_cliente, telefone_cliente),
+  FOREIGN KEY (cod_cliente)
+    REFERENCES TB_CLIENTE (cod_cliente)
+);
+
+CREATE TABLE TB_VENDEDOR (
+  cod_vendedor VARCHAR(255) PRIMARY KEY,
+  nome_vendedor VARCHAR(100)
+);
+
+CREATE TABLE TB_CATEGORIA (
+  cod_categoria VARCHAR(255) PRIMARY KEY,
+  nome_categoria VARCHAR(100)
+);
+
+CREATE TABLE TB_PEDIDO (
+  num_pedido INT PRIMARY KEY,
+  data_pedido DATE,
+  cod_cliente VARCHAR(255),
+  cod_vendedor VARCHAR(255),
+  FOREIGN KEY (cod_cliente)
+    REFERENCES TB_CLIENTE (cod_cliente),
+  FOREIGN KEY (cod_vendedor)
+    REFERENCES TB_VENDEDOR (cod_vendedor)
+);
+
+CREATE TABLE TB_PRODUTO (
+  cod_produto VARCHAR(255) PRIMARY KEY,
+  nome_produto VARCHAR(100),
+  cod_categoria VARCHAR(100),
+  preco_unitario DECIMAL(10,2),
+  FOREIGN KEY (cod_categoria)
+    REFERENCES TB_CATEGORIA (cod_categoria)
+);
+
+
+CREATE TABLE TB_ITEM_PEDIDO (
+  cod_pedido INT,
+  cod_produto VARCHAR(255),
+  quantidade INT,
+  preco_unitario DECIMAL(10,2),
+  PRIMARY KEY (cod_pedido,cod_produto),
+  FOREIGN KEY (cod_pedido)
+    REFERENCES TB_PEDIDO (num_pedido),
+  FOREIGN KEY (cod_produto)
+    REFERENCES TB_PRODUTO (cod_produto)
+);
+
+-- Inserir info 
+
+INSERT INTO TB_CLIENTE
+(cod_cliente, nome_cliente, cpf_cliente, rua_cliente, num_rua, complemento, bairro, cidade, uf)
+VALUES
+('C101', 'Ana Silva', '111.222.333-44', 'Rua das Flores', '123', 'APT 42', 'Jardins', 'São Paulo', 'SP'),
+('C102', 'Carlos Souza', '555.666.777-88', 'Av. Brasil', '500', 'BLOCO B', 'Copacabana', 'Rio de Janeiro', 'RJ'),
+('C103', 'Mariana Costa', '999.888.777-66', 'Rua da Bahia', '1050', NULL, 'Centro', 'Belo Horizonte', 'MG'),
+('C104', 'João Pedro Santos', '222.333.444-55', 'Rua XV de Novembro', '200', NULL, 'Centro', 'Curitiba', 'PR'),
+('C105', 'Beatriz Oliveira', '333.444.555-66', 'Rua Barão de Jaguara', '450', NULL, 'Centro', 'Campinas', 'SP'),
+('C106', 'Ricardo Ferreira', '444.555.666-77', 'Av. Beira Mar', '1200', NULL, 'Agronômica', 'Florianópolis', 'SC');
+
+INSERT INTO TB_CLIENTE_TELEFONE
+(cod_cliente, telefone_cliente)
+VALUES
+('C101', '(11)98888-1111'),
+('C101', '(11)3333-2222'),
+('C102', '(21)97777-3333'),
+('C103', '(31)99111-4444'),
+('C103', '(313222-5555)'),
+('C104', '(41)98444-7777'),
+('C105', '(19)98111-2222'),
+('C106', '(48)99888-3333'),
+('C106', '(48)3222-1111');
+
+INSERT INTO TB_VENDEDOR
+(cod_vendedor, nome_vendedor)
+VALUES
+('V01', 'Roberto Lima'),
+('V02', 'Fernanda Lima'),
+('V03', 'Lucas Mendes');
+
+INSERT INTO TB_CATEGORIA
+(cod_categoria, nome_categoria)
+VALUES
+('CAT01', 'Informática'),
+('CAT02', 'Periféricos'),
+('CAT03', 'Acessórios'),
+('CAT04', 'Móveis');
+
+INSERT INTO TB_PEDIDO
+(num_pedido, data_pedido, cod_cliente, cod_vendedor)
+VALUES
+(1001, '2026-10-01', 'C101', 'V01'),
+(1002, '2026-10-02', 'C102', 'V02'),
+(1003, '2026-10-03', 'C103', 'V01'),
+(1004, '2026-10-04', 'C101', 'V03'),
+(1005, '2026-10-05', 'C104', 'V02'),
+(1006, '2026-10-06', 'C105', 'V01'),
+(1007, '2026-10-07', 'C106', 'V03'),
+(1008, '2026-10-08', 'C102', 'V02'),
+(1009, '2026-10-09', 'C103', 'V01'),
+(1010, '2026-10-10', 'C104', 'V02');
+
+INSERT INTO TB_PRODUTO
+(cod_produto, nome_produto, cod_categoria, preco_unitario)
+VALUES
+('P01', 'Notebook Dell Inspiron', 'CAT01', 4500.00),
+('P03', 'Mouse sem fio Logitech', 'CAT02', 85.00),
+('P05', 'Mochila para Notebook', 'CAT03', 150.00),
+('P02', 'Monitor 27 IPS Dell', 'CAT01', 1300.00),
+('P04', 'Teclado Mecânico RGB', 'CAT02', 250.00),
+('P06', 'Headset gamer HyperX', 'CAT02', 350.00),
+('P07', 'Webcam 4K UltraHD', 'CAT02', 480.00),
+('P08', 'Cadeira ergonômica pro', 'CAT04', 1200.00);
+
+INSERT INTO TB_ITEM_PEDIDO
+(cod_pedido, cod_produto, quantidade, preco_unitario)
+VALUES
+(1001, 'P01', 1, 4500),
+(1001, 'P03', 2, 85),
+(1001, 'P05', 1, 150),
+(1002, 'P02', 1, 1300),
+(1002, 'P03', 1, 85),
+(1003, 'P04', 1, 250),
+(1003, 'P06', 1, 350),
+(1004, 'P01', 1, 4500),
+(1004, 'P05', 1, 250),
+(1005, 'P04', 2, 150),
+(1005, 'P07', 1, 480),
+(1006, 'P02', 2, 1300),
+(1006, 'P08', 1, 1200),
+(1007, 'P01', 1, 4500),
+(1007, 'P06', 1, 350),
+(1007, 'P03', 1, 85),
+(1008, 'P07', 1, 480),
+(1009, 'P08', 1, 1200),
+(1010, 'P04', 2, 250);
+
+
+SELECT * FROM TB_CLIENTE;
+SELECT * FROM TB_CLIENTE_TELEFONE;
+SELECT * FROM TB_VENDEDOR;
+SELECT * FROM TB_CATEGORIA;
+SELECT * FROM TB_PRODUTO;
+SELECT * FROM TB_PEDIDO;
+SELECT * FROM TB_ITEM_PEDIDO;
